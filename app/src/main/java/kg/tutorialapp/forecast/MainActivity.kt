@@ -2,6 +2,7 @@ package kg.tutorialapp.forecast
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers.update
 import android.widget.TextView
 import android.widget.Toast
 import kg.tutorialapp.forecast.models.Comments
@@ -18,6 +19,29 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Query
 
 class MainActivity : AppCompatActivity() {
+
+    private val okhttp by lazy {
+        val interceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
+        OkHttpClient.Builder().addInterceptor(interceptor).build()
+    }
+
+    private val retrofit by lazy {
+        Retrofit.Builder()
+//                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okhttp)
+                .build()
+    }
+
+    private val weatherApi by lazy {
+        retrofit.create(WeatherApi::class.java)
+    }
+
+    private val postsApi by lazy {
+        retrofit.create(PostsApi::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,16 +53,55 @@ class MainActivity : AppCompatActivity() {
 //        createPostUsingFields()
 //        createPostUsingFieldMap()
 //        getWeatherUsingQueryMap()
-        getCommentsUsingQueryMap()
+//        getCommentsUsingQueryMap()
+//        update()
+        deletePost()
+    }
+
+    private fun deletePost() {
+        val call = postsApi.deletePost(42)
+
+        call.enqueue(object: Callback<Unit>{
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                val tvText1: TextView = findViewById(R.id.tv_text1)
+                tvText1.text = response.code().toString()
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+
+            }
+        })
+    }
+
+    private fun update() {
+        val newPost = Post(userId = 20, body = "This is body")
+
+        val call = postsApi.patchPost(id = 42, post = newPost)
+
+        call.enqueue(object: Callback<Post>{
+            override fun onResponse(call: Call<Post>, response: Response<Post>) {
+                val resultPost = response.body()
+
+                resultPost?.let {
+                    val resultText = "ID: " + it.id + "\n" +
+                            "userID: " + it.userId + "\n" +
+                            "TITLE: " + it.title + "\n" +
+                            "BODY: " + it.body + "\n"
+
+                    val tvText1: TextView = findViewById(R.id.tv_text1)
+                    tvText1.text = resultText
+                }
+            }
+
+            override fun onFailure(call: Call<Post>, t: Throwable) {
+
+            }
+        })
     }
 
     private fun getCommentsUsingQueryMap() {
         val map = HashMap<String, Any>().apply {
-            put("postId", Int)
-            put("id", Int)
-            put("name", String)
-            put("email", String)
-            put("body", String)
+            put("postId", 1)
         }
 
         val call = postsApi.getCommentUsingQueryMap(map)
@@ -48,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                     val resultComment = response.body()
                     resultComment?.let {
                         val resultText = "ID: " + it.id + "\n" +
-                                "userID: " + it.postId + "\n" +
+                                "postID: " + it.postId + "\n" +
                                 "NAME: " + it.name + "\n" +
                                 "EMAIL: " + it.email + "\n" +
                                 "BODY: " + it.body + "\n"
@@ -89,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ForeCast>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
     }
@@ -120,7 +183,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
     }
@@ -145,7 +208,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
 
@@ -173,7 +236,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
     }
@@ -196,7 +259,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
     }
@@ -247,27 +310,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private val okhttp by lazy {
-        val interceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        OkHttpClient.Builder().addInterceptor(interceptor).build()
-    }
 
-    private val retrofit by lazy {
-        Retrofit.Builder()
-//                .baseUrl("https://api.openweathermap.org/data/2.5/")
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okhttp)
-                .build()
-    }
-
-    private val weatherApi by lazy {
-        retrofit.create(WeatherApi::class.java)
-    }
-
-    private val postsApi by lazy {
-        retrofit.create(PostsApi::class.java)
-    }
 
 }
 

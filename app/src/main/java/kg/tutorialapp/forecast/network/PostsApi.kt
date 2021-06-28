@@ -35,8 +35,25 @@ interface PostsApi {
     ): Call<Post>
 
 
-    @GET("comments?postId=1")
+    @GET("comments")
     fun getCommentUsingQueryMap(
             @QueryMap map: Map<String, Any>
     ): Call<Comments>
+
+    @PUT("posts/{id}")
+    fun putPost(
+            @Path("id") id: Int,
+            @Body post: Post
+    ): Call<Post>
+
+    @PATCH("posts/{id}")
+    fun patchPost(
+            @Path("id") id: Int,
+            @Body post: Post
+    ): Call<Post>
+
+    @DELETE("posts/{id}")
+    fun deletePost(
+            @Path("id") id : Int
+    ): Call<Unit>
 }
