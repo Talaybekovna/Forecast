@@ -1,5 +1,6 @@
 package kg.tutorialapp.forecast.network
 
+import kg.tutorialapp.forecast.models.Comments
 import kg.tutorialapp.forecast.models.Post
 import retrofit2.Call
 import retrofit2.http.*
@@ -33,4 +34,9 @@ interface PostsApi {
             @FieldMap map: Map<String, Any>
     ): Call<Post>
 
+
+    @GET("comments?postId=1")
+    fun getCommentUsingQueryMap(
+            @QueryMap map: Map<String, Any>
+    ): Call<Comments>
 }

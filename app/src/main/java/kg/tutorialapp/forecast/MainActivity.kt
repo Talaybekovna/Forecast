@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import kg.tutorialapp.forecast.models.Comments
 import kg.tutorialapp.forecast.models.Post
 import kg.tutorialapp.forecast.network.PostsApi
 import kg.tutorialapp.forecast.network.WeatherApi
@@ -26,8 +27,42 @@ class MainActivity : AppCompatActivity() {
 //        fetchPostById()
 //        createPost()
 //        createPostUsingFields()
-        createPostUsingFieldMap()
+//        createPostUsingFieldMap()
 //        getWeatherUsingQueryMap()
+        getCommentsUsingQueryMap()
+    }
+
+    private fun getCommentsUsingQueryMap() {
+        val map = HashMap<String, Any>().apply {
+            put("postId", Int)
+            put("id", Int)
+            put("name", String)
+            put("email", String)
+            put("body", String)
+        }
+
+        val call = postsApi.getCommentUsingQueryMap(map)
+        call.enqueue(object: Callback<Comments>{
+            override fun onResponse(call: Call<Comments>, response: Response<Comments>) {
+                if (response.isSuccessful) {
+                    val resultComment = response.body()
+                    resultComment?.let {
+                        val resultText = "ID: " + it.id + "\n" +
+                                "userID: " + it.postId + "\n" +
+                                "NAME: " + it.name + "\n" +
+                                "EMAIL: " + it.email + "\n" +
+                                "BODY: " + it.body + "\n"
+
+                        val tvText1: TextView = findViewById(R.id.tv_text1)
+                        tvText1.text = resultText
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Comments>, t: Throwable) {
+                Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun getWeatherUsingQueryMap() {
@@ -219,8 +254,8 @@ class MainActivity : AppCompatActivity() {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-                .baseUrl("https://api.openweathermap.org/data/2.5/")
-//                .baseUrl("https://jsonplaceholder.typicode.com/")
+//                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okhttp)
                 .build()
@@ -233,6 +268,7 @@ class MainActivity : AppCompatActivity() {
     private val postsApi by lazy {
         retrofit.create(PostsApi::class.java)
     }
+
 }
 
 
