@@ -12,6 +12,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kg.tutorialapp.forecast.storage.ForeCastDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         btnToast.setOnClickListener {
             Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show()
+
         }
     }
 

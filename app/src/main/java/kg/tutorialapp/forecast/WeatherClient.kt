@@ -1,6 +1,5 @@
 package kg.tutorialapp.forecast
 
-import kg.tutorialapp.forecast.network.PostsApi
 import kg.tutorialapp.forecast.network.WeatherApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
