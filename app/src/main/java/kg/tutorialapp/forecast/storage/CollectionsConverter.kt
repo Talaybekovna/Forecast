@@ -14,7 +14,7 @@ class CollectionsConverter {
 
     @TypeConverter
     fun fromJsonToHourlyForeCastList(json: String?): List<HourlyForeCast>? =
-        Gson().fromJson(json, object : TypeToken<List<DailyForeCast>>() {}.type)
+        Gson().fromJson(json, object : TypeToken<List<HourlyForeCast>>() {}.type)
 
     @TypeConverter
     fun fromDailyForecastListToJson(list: List<DailyForeCast>?): String? =
