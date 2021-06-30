@@ -2,7 +2,7 @@ package kg.tutorialapp.forecast.network
 
 
 import io.reactivex.Single
-import kg.tutorialapp.forecast.ForeCast
+import kg.tutorialapp.forecast.models.ForeCast
 import retrofit2.http.GET
 import retrofit2.http.Query
 

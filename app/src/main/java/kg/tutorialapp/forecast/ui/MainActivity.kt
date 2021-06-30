@@ -9,10 +9,10 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kg.tutorialapp.forecast.ForeCast
+import kg.tutorialapp.forecast.Extensions.format
 import kg.tutorialapp.forecast.databinding.ActivityMainBinding
-import kg.tutorialapp.forecast.format
 import kg.tutorialapp.forecast.models.Constants
+import kg.tutorialapp.forecast.models.ForeCast
 import kg.tutorialapp.forecast.network.WeatherClient
 import kg.tutorialapp.forecast.storage.ForeCastDatabase
 import kg.tutorialapp.forecast.ui.rv.DailyForeCastAdapter

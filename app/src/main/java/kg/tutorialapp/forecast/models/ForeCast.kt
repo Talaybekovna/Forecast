@@ -1,4 +1,4 @@
-package kg.tutorialapp.forecast
+package kg.tutorialapp.forecast.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

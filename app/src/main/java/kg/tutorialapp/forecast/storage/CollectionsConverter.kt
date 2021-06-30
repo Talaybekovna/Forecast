@@ -3,8 +3,8 @@ package kg.tutorialapp.forecast.storage
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kg.tutorialapp.forecast.DailyForeCast
-import kg.tutorialapp.forecast.HourlyForeCast
+import kg.tutorialapp.forecast.models.DailyForeCast
+import kg.tutorialapp.forecast.models.HourlyForeCast
 
 class CollectionsConverter {
 

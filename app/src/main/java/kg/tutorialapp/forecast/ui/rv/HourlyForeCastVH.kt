@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kg.tutorialapp.forecast.HourlyForeCast
+import kg.tutorialapp.forecast.Extensions.format
 import kg.tutorialapp.forecast.databinding.ItemHourlyForecastBinding
-import kg.tutorialapp.forecast.format
 import kg.tutorialapp.forecast.models.Constants
+import kg.tutorialapp.forecast.models.HourlyForeCast
 import kotlin.math.roundToInt
 
 class HourlyForeCastVH(private val binding: ItemHourlyForecastBinding): RecyclerView.ViewHolder(binding.root) {
@@ -29,7 +29,7 @@ class HourlyForeCastVH(private val binding: ItemHourlyForecastBinding): Recycler
     }
 
     companion object{
-        fun create(parent: ViewGroup): HourlyForeCastVH{
+        fun create(parent: ViewGroup): HourlyForeCastVH {
             val binding = ItemHourlyForecastBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
             return HourlyForeCastVH(binding)

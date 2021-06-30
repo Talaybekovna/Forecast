@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import kg.tutorialapp.forecast.ForeCast
+import kg.tutorialapp.forecast.models.ForeCast
 
 @Dao
 interface ForeCastDao {

@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kg.tutorialapp.forecast.DailyForeCast
+import kg.tutorialapp.forecast.Extensions.format
 import kg.tutorialapp.forecast.databinding.ItemDailyForecastBinding
-import kg.tutorialapp.forecast.format
 import kg.tutorialapp.forecast.models.Constants
+import kg.tutorialapp.forecast.models.DailyForeCast
 import kotlin.math.roundToInt
 
 class DailyForeCastVH(private val binding: ItemDailyForecastBinding): RecyclerView.ViewHolder(binding.root) {

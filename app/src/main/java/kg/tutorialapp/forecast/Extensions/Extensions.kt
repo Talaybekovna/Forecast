@@ -1,4 +1,4 @@
-package kg.tutorialapp.forecast
+package kg.tutorialapp.forecast.Extensions
 
 import java.text.SimpleDateFormat
 import java.util.*

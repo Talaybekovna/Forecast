@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Forecast</string>
+    <string name="app_name">Weather Forecast</string>
     <string name="bishkek">Бишкек</string>
     <string name="refresh">Обновить</string>
     <string name="sunset">Закат</string>
