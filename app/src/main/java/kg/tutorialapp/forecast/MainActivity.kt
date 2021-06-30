@@ -3,46 +3,63 @@ package kg.tutorialapp.forecast
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kg.tutorialapp.forecast.databinding.ActivityMainBinding
 import kg.tutorialapp.forecast.storage.ForeCastDatabase
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
 
     private val db by lazy {
         ForeCastDatabase.getInstance(applicationContext)
     }
 
-    lateinit var tvList: TextView
-    lateinit var button: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        tvList = findViewById(R.id.tv_forecast_list)
-        button = findViewById(R.id.button)
+        getWeatherFromApi()
 
-        makeRxCall()
+        subscribeToLiveData()
 
+    }
 
+    private fun subscribeToLiveData() {
         db.forecastDao().getAll().observe(this, Observer {
-            tvList.text = it?.toString()
+            it?.let {
+                binding.tvTemperature.text = it.current?.temp?.roundToInt().toString()
+                binding.tvTemperature.text = it.current?.temp?.roundToInt().toString()
+                binding.tvDate.text = it.current?.date?.format()
+                binding.tvTempMax.text = it.daily?.get(0)?.temp?.max?.roundToInt()?.toString()
+                binding.tvTempMin.text = it.daily?.get(0)?.temp?.min?.roundToInt()?.toString()
+                binding.tvFeelsLike.text = it.current?.feels_like?.roundToInt()?.toString()
+                binding.tvWeather.text = it.current?.weather?.get(0)?.description
+                binding.tvSunrise.text = it.current?.sunrise?.format("hh:mm")
+                binding.tvSunset.text = it.current?.sunset?.format("hh:mm")
+                binding.tvHumidity.text = "${it.current?.humidity?.toString()} %"
+
+                it.current?.weather?.get(0)?.icon?.let { icon ->
+                    Glide.with(this)
+                        .load("https://openweathermap.org/img/wn/${icon}@2x.png")
+                        .into(binding.ivWeatherIcon)
+                }
+            }
         })
     }
 
+
     @SuppressLint("CheckResult")
-    private fun makeRxCall() {
+    private fun getWeatherFromApi() {
         WeatherClient.weatherApi.fetchWeather()
                 .subscribeOn(Schedulers.io())
                 .map {
-                    db.forecastDao().deleteAll()
                     db.forecastDao().insert(it)
                     it
                 }
@@ -53,22 +70,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 })
     }
-
-/*    @SuppressLint("CheckResult")
-    private fun getFromDb() {
-        db.forecastDao()
-            .getAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    tvList.text = it.toString()
-                },
-                {
-
-                }
-            )
-    }*/
 
 }
 
