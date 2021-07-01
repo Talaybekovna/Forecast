@@ -3,7 +3,9 @@ package kg.tutorialapp.forecast.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import kg.tutorialapp.forecast.Extensions.format
@@ -14,6 +16,7 @@ import kg.tutorialapp.forecast.ui.rv.DailyForeCastAdapter
 import kg.tutorialapp.forecast.ui.rv.HourlyForeCastAdapter
 import org.koin.android.viewmodel.ext.android.getViewModel
 import kotlin.math.roundToInt
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +35,14 @@ class MainActivity : AppCompatActivity() {
         setupViews()
         setupRecyclerViews()
         subscribeToLiveData()
+
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Log.i("TOKEN", it)
+        }
+
+        intent.getStringExtra("EXTRA")?.let {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        }
 
     }
 
