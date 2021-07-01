@@ -2,6 +2,7 @@ package kg.tutorialapp.forecast.di
 
 import android.content.Context
 import androidx.room.Room
+import kg.tutorialapp.forecast.BuildConfig
 import kg.tutorialapp.forecast.network.WeatherApi
 import kg.tutorialapp.forecast.repo.WeatherRepo
 import kg.tutorialapp.forecast.storage.ForeCastDatabase
@@ -40,13 +41,15 @@ fun provideForeCastDatabase(context: Context) =
 fun provideHttpClient(): OkHttpClient {
     val interceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
     return OkHttpClient.Builder()
-        .addInterceptor(interceptor)
+        .apply {
+            addInterceptor(interceptor)
+        }
         .build()
 }
 
 fun provideRetrofit(httpClient: OkHttpClient) =
     Retrofit.Builder()
-        .baseUrl("https://api.openweathermap.org/data/2.5/")
+        .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(httpClient)
